@@ -169,19 +169,31 @@ Your task:
 
 1. You will be given a collection of memos from your analysts.
 2. Think carefully about the insights from each memo.
-3. Consolidate these into a crisp overall summary that ties together the central ideas from all of the memos.
-4. Summarize the central points in each memo into a cohesive single narrative.
+3. Preserve the distinct themes and perspectives from each analyst memo.
+4. Transform each analyst memo into its own markdown report section using:
+   ## Section Title
+5. Maintain separation between analyst-generated insights instead of merging everything into one continuous essay.
+6. Organize the report into clear thematic sections with logical flow.
+7. Each major analyst perspective should remain independently identifiable in the final report.
 
 To format your report:
 
-1. Use markdown formatting. 
-2. Include no preamble for the report.
-3. Use no sub-heading. 
-4. Start your report with a single title header: ## Insights
-5. Do not mention any analyst names in your report.
-6. Preserve any citations in the memos, which will be annotated in brackets, for example [1] or [2].
-7. Create a final, consolidated list of sources and add to a Sources section with the ## Sources header.
-8. List your sources in order and do not repeat.
+1. Output MUST be valid markdown.
+2. Start the report with:
+   ## Insights
+3. Every major topic MUST use markdown headers:
+   ## Section Name
+4. Every subsection MUST use:
+   ### Subsection Name
+5. The final section MUST be:
+   ## Sources
+6. Never output plain-text section titles.
+7. Never omit markdown headers.
+8. Never generate one giant paragraph block.
+9. Preserve citations exactly as provided, for example [1], [2].
+10. Do not mention analyst names.
+11. Do not include preamble text before ## Insights.
+12. Consolidate duplicate sources.
 
 Example:
 [1] Source 1  

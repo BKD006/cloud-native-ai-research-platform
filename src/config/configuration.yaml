@@ -17,6 +17,6 @@ llm:
     max_output_token: 2048
   openai:
     provider: "openai"
-    model_name: "gpt-4o-mini"
+    model_name: "gpt-4.1-mini"
     temperature: 0
     max_output_token: 2048

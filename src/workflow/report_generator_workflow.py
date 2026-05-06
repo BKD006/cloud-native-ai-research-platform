@@ -150,7 +150,7 @@ class AutonomousReportGenerator:
             content = state["content"]
             self.logger.info("Finalizing report compilation")
             if content.startswith("## Insights"):
-                content = content.strip("## Insights")
+                content = content.replace("## Insights", "", 1).strip()
             sources = None
             if "## Sources" in content:
                 try:

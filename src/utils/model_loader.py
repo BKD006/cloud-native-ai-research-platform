@@ -53,23 +53,6 @@ class ModelLoader:
         except Exception as e:
             log.error("Error initializing ModelLoader", error=str(e))
             raise ResearchAnalystException("Failed to initialize ModelLoader", sys)
-
-    def load_embeddings(self):
-        """
-        Load and return a Amazon Titan embedding model.
-
-        Returns:
-
-        """
-        try:
-            model_name=self.config["embedding_model"]["model_name"]
-            log.info("Load embedding model", model=model_name)
-            embeddings= BedrockEmbeddings(model_id=model_name)
-            log.info("Embedding model loaded successfully", model=model_name)
-            return embeddings
-        except Exception as e:
-            log.error("Error loading embedding model", error=str(e))
-            raise ResearchAnalystException("Failed to load embedding model", sys)
         
     def load_llm(self):
         """
