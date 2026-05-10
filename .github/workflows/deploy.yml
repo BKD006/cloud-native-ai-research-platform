@@ -1,0 +1,61 @@
+name: Build and Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_CONTAINER_REGISTRY: biroaireportregistry.azurecr.io
+  CONTAINER_APP_NAME: research-report-api
+  RESOURCE_GROUP: rg-birokishoredas-7574
+  IMAGE_NAME: research-report-app
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        run: |
+          az acr login --name biroaireportregistry
+
+      - name: Build Docker Image
+        run: |
+          docker build -t $AZURE_CONTAINER_REGISTRY/$IMAGE_NAME:${{ github.sha }} .
+
+      - name: Push Docker Image
+        run: |
+          docker push $AZURE_CONTAINER_REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+      - name: Deploy to Azure Container Apps
+        run: |
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --image $AZURE_CONTAINER_REGISTRY/$IMAGE_NAME:${{ github.sha }}
+
+      - name: Configure Environment Variables
+        run: |
+          az containerapp secret set \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --secrets \
+              openai-api-key=${{ secrets.OPENAI_API_KEY }} \
+              tavily-api-key=${{ secrets.TAVILY_API_KEY }}
+
+          az containerapp update \
+            --name $CONTAINER_APP_NAME \
+            --resource-group $RESOURCE_GROUP \
+            --set-env-vars \
+              OPENAI_API_KEY=secretref:openai-api-key \
+              OPENAI_ENDPOINT=${{ secrets.OPENAI_ENDPOINT }} \
+              TAVILY_API_KEY=secretref:tavily-api-key
