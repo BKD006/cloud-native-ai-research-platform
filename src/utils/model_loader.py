@@ -2,7 +2,6 @@ import os
 import sys
 from dotenv import load_dotenv
 from src.utils.config_loader import load_config
-from langchain_aws.embeddings.bedrock import BedrockEmbeddings
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 from src.logger import GLOBAL_LOGGER as log
