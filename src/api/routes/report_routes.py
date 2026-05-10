@@ -3,14 +3,15 @@ from fastapi.responses import HTMLResponse
 from src.api.services.report_services import ReportService
 
 router = APIRouter()
-
+service = ReportService()
 
 # Direct dashboard access
 @router.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
     return request.app.templates.TemplateResponse(
-        "dashboard.html",
-        {
+        request=request,
+        name="dashboard.html",
+        context={
             "request": request,
             "user": "Guest"
         }
@@ -19,14 +20,15 @@ async def dashboard(request: Request):
 
 @router.post("/generate_report", response_class=HTMLResponse)
 async def generate_report(request: Request, topic: str = Form(...)):
-    service = ReportService()
+    # service = ReportService()
 
     result = service.start_report_generation(topic, 3)
     thread_id = result["thread_id"]
 
     return request.app.templates.TemplateResponse(
-        "reportprogress.html",
-        {
+        request=request,
+        name="reportprogress.html",
+        context={
             "request": request,
             "topic": topic,
             "feedback": "",
@@ -42,18 +44,20 @@ async def submit_feedback(
     feedback: str = Form(...),
     thread_id: str = Form(...),
 ):
-    service = ReportService()
+    # service = ReportService()
 
+    print("STEP 1")
     service.submit_feedback(thread_id, feedback)
-
+    print("STEP 2")
     result = service.get_report_status(thread_id)
-
+    print("STEP 3")
     doc_path = result.get("docx_path")
     pdf_path = result.get("pdf_path")
 
     return request.app.templates.TemplateResponse(
-        "reportprogress.html",
-        {
+        request=request,
+        name="reportprogress.html",
+        context={
             "request": request,
             "topic": topic,
             "feedback": feedback,
@@ -66,7 +70,7 @@ async def submit_feedback(
 
 @router.get("/download/{file_name}", response_class=HTMLResponse)
 async def download_report(file_name: str):
-    service = ReportService()
+    # service = ReportService()
 
     file_response = service.download_file(file_name)
 
