@@ -10,7 +10,7 @@ app= FastAPI(title="Report Generator Agent")
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-templates=Jinja2Templates(directory="src/api/templates")
+templates=Jinja2Templates(directory="templates")
 app.templates= templates # Templates accessible inside router
 
 def basename_filter(path: str):
